@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?serverTimezone=UTC
+    username: ${mysql.username}
+    password: ${mysql.password}
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:sql/MysqlInitStructure.sql
+
+# MySQL配置
+mysql:
+  host: localhost
+  port: 3306
+  username: root
+  password: root
+  # 数据库名
+  database: brick

@@ -1,0 +1,27 @@
+server:
+  port: ${server-info.port}
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+  global-config:
+    db-config:
+      id-type: auto
+
+logging:
+  level:
+    root: ${server-info.log-level}
+
+spring:
+  profiles:
+    include: ${database}
+
+database: sqlite
+
+server-info:
+  port: 8080
+  implementationName: 积木brick-Yggdrasil验证端
+  implementationVersion: 0.3.0
+  loginRate: 5
+  log-level: info

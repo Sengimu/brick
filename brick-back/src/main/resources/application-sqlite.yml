@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:brick.db
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:sql/SqliteInitStructure.sql
