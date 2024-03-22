@@ -26,11 +26,7 @@ public class OtherController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
 
-        try {
-            byte[] bytes = FileUtil.readBytes(pathManager.getDirPath() + pathManager.getTexturesPath() + "/" + hash + ".png");
-            return new Res(bytes, headers, 200);
-        } catch (Exception e) {
-            return Res.yFail("ForbiddenOperationException", "The file is not exist.", 403);
-        }
+        byte[] bytes = FileUtil.readBytes(pathManager.getDirPath() + pathManager.getTexturesPath() + "/" + hash + ".png");
+        return new Res(bytes, headers, 200);
     }
 }

@@ -10,8 +10,13 @@ mybatis-plus:
       id-type: auto
 
 logging:
+  group:
+    o: net.sengimu
   level:
-    root: ${server-info.log-level}
+    root: info
+    o: ${server-info.log-level}
+  file:
+    name: log/server.log
 
 spring:
   profiles:

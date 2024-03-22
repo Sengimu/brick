@@ -8,12 +8,13 @@ import net.sengimu.brickback.common.PathManager;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 
 public class KeyPairUtil {
 
     private static final PathManager PATH_MANAGER = new PathManager();
 
-    public static String getPrivateKeyBase64() {
+    public static String getPrivateKeyBase64() throws NoSuchAlgorithmException {
 
         Setting keyPairSetting = new Setting(FileUtil.touch(PATH_MANAGER.getDirPath() + PATH_MANAGER.getKeyPairPath()), CharsetUtil.CHARSET_UTF_8, true);
 
@@ -25,7 +26,7 @@ public class KeyPairUtil {
         return keyPairSetting.getStr("privateKey");
     }
 
-    public static String getPublicKeyBase64() {
+    public static String getPublicKeyBase64() throws NoSuchAlgorithmException {
 
         Setting keyPairSetting = new Setting(FileUtil.touch(PATH_MANAGER.getDirPath() + PATH_MANAGER.getKeyPairPath()), CharsetUtil.CHARSET_UTF_8, true);
 
@@ -37,14 +38,10 @@ public class KeyPairUtil {
         return keyPairSetting.getStr("publicKey");
     }
 
-    public static void generateKeyPair() {
+    public static void generateKeyPair() throws NoSuchAlgorithmException {
 
-        KeyPairGenerator gen = null;
-        try {
-            gen = KeyPairGenerator.getInstance("RSA");
-        } catch (Exception ignored) {
+        KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA");
 
-        }
         assert gen != null;
         gen.initialize(4096);
         KeyPair pair = gen.generateKeyPair();

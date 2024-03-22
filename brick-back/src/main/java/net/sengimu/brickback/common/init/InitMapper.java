@@ -1,4 +1,4 @@
-package net.sengimu.brickback.mapper;
+package net.sengimu.brickback.common.init;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;

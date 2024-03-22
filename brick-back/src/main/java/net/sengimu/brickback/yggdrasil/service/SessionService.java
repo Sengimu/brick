@@ -12,6 +12,7 @@ import net.sengimu.brickback.yggdrasil.bo.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 @Service
@@ -35,7 +36,7 @@ public class SessionService {
     public Boolean join(String accessToken, String selectedProfile, String serverId) {
 
         Object ifPresent = tokenCache.getIfPresent(accessToken);
-        if (null == ifPresent) {
+        if (ifPresent == null) {
             return false;
         }
 
@@ -48,7 +49,7 @@ public class SessionService {
         return true;
     }
 
-    public ProfileInfo hasJoined(String username, String serverId, String ip) {
+    public ProfileInfo hasJoined(String username, String serverId, String ip) throws NoSuchAlgorithmException {
 
         JSONObject serverIdObj = JSONUtil.parseObj(serverIdCache.getIfPresent(serverId));
         String accessToken = serverIdObj.getStr("accessToken");

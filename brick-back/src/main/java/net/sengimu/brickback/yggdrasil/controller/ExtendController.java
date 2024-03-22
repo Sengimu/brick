@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +30,8 @@ public class ExtendController {
     @Value("${server-info.implementationVersion}")
     private String implementationVersion;
 
-    @GetMapping
-    public Res mainInfo() {
+    @GetMapping({"", "/"})
+    public Res mainInfo() throws NoSuchAlgorithmException {
 
         String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
         String url2 = request.getServerName();
@@ -50,10 +51,5 @@ public class ExtendController {
                 "\n-----END PUBLIC KEY-----\n");
 
         return Res.ySuccess(result);
-    }
-
-    @GetMapping("/")
-    public Res mainInfoWithSlash() {
-        return mainInfo();
     }
 }

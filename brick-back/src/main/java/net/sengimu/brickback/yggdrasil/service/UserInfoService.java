@@ -43,7 +43,7 @@ public class UserInfoService {
     }
 
     public Boolean checkLoginRate(String username) {
-        return !(null == loginRateCache.getIfPresent(username));
+        return !(loginRateCache.getIfPresent(username) == null);
     }
 
     public UserInfo getUserInfoInfoById(Integer id) {

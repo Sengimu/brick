@@ -11,6 +11,7 @@ import net.sengimu.brickback.po.Profile;
 import net.sengimu.brickback.po.Texture;
 import net.sengimu.brickback.utils.KeyPairUtil;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Data
@@ -20,7 +21,7 @@ public class ProfileInfo {
     private String name;
     private List<Map<String, Object>> properties;
 
-    public ProfileInfo(Profile profile, List<Texture> textures, String urlPrefix) {
+    public ProfileInfo(Profile profile, List<Texture> textures, String urlPrefix) throws NoSuchAlgorithmException {
 
         this.id = profile.getUuid();
         this.name = profile.getName();

@@ -10,6 +10,7 @@ import net.sengimu.brickback.yggdrasil.bo.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +43,7 @@ public class TokenService {
         return value != null ? (Token) value : null;
     }
 
-    public Map<String, Object> refreshToken(Token oldToken) {
+    public Map<String, Object> refreshToken(Token oldToken) throws NoSuchAlgorithmException {
 
         String uuid = oldToken.getUuid();
         String clientToken = oldToken.getClientToken();
@@ -67,12 +68,5 @@ public class TokenService {
 
     public void invalidateToken(String accessToken) {
         tokenCache.invalidate(accessToken);
-    }
-
-    public void pAll() {
-        for (Map.Entry<String, Object> entry : tokenCache.asMap().entrySet()) {
-            System.out.print(entry.getKey() + " ----- " + entry.getValue());
-            System.out.println();
-        }
     }
 }

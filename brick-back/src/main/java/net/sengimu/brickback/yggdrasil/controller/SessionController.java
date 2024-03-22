@@ -7,6 +7,8 @@ import net.sengimu.brickback.yggdrasil.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
+
 @RestController
 @RequestMapping("/api/yggdrasil")
 public class SessionController {
@@ -25,7 +27,7 @@ public class SessionController {
     }
 
     @GetMapping("/sessionserver/session/minecraft/hasJoined")
-    public Res hasJoined(@RequestParam("username") String username, @RequestParam("serverId") String serverId, @RequestParam(name = "ip", required = false) String ip) {
+    public Res hasJoined(@RequestParam("username") String username, @RequestParam("serverId") String serverId, @RequestParam(name = "ip", required = false) String ip) throws NoSuchAlgorithmException {
 
         ProfileInfo profileInfo = sessionService.hasJoined(username, serverId, ip);
         return profileInfo != null ? Res.ySuccess(profileInfo) : Res.ySuccess(204);

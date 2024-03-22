@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class ProfileInfoService {
     @Autowired
     private PathManager pathManager;
 
-    public List<ProfileInfo> getProfileInfosByUserId(Integer userId) {
+    public List<ProfileInfo> getProfileInfosByUserId(Integer userId) throws NoSuchAlgorithmException {
 
         String urlPrefix = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/textures/";
 
@@ -49,18 +50,22 @@ public class ProfileInfoService {
         return profileInfos;
     }
 
-    public ProfileInfo getProfileInfoByProfile(Profile profile) {
+    public ProfileInfo getProfileInfoByProfile(Profile profile) throws NoSuchAlgorithmException {
+
+        if (profile == null) {
+            return null;
+        }
 
         String urlPrefix = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/textures/";
         List<Texture> textures = textureService.getTexturesByProfileId(profile.getId());
         return new ProfileInfo(profile, textures, urlPrefix);
     }
 
-    public ProfileInfo getProfileInfoByUUID(String uuid) {
+    public ProfileInfo getProfileInfoByUUID(String uuid) throws NoSuchAlgorithmException {
         return getProfileInfoByProfile(profileService.getProfileByUUID(uuid));
     }
 
-    public ProfileInfo getProfileInfoByName(String profileName) {
+    public ProfileInfo getProfileInfoByName(String profileName) throws NoSuchAlgorithmException {
         return getProfileInfoByProfile(profileService.getProfileByName(profileName));
     }
 
@@ -70,7 +75,7 @@ public class ProfileInfoService {
         textureService.deleteTextureByProfileId(profile.getId(), textureType);
     }
 
-    public Boolean putTextureByUUID(String uuid, String textureType, String model, String hashPath, MultipartFile file) {
+    public Boolean putTextureByUUID(String uuid, String textureType, String model, String hashPath, MultipartFile file) throws IOException {
 
         Profile profile = profileService.getProfileByUUID(uuid);
         if (!profile.getAllowUpload().contains(textureType)) {
@@ -82,13 +87,9 @@ public class ProfileInfoService {
             return false;
         }
 
-        try {
-            File hashFile = FileUtil.touch(pathManager.getDirPath() + pathManager.getTexturesPath() + "/" + hashPath + ".png");
-            FileOutputStream os = new FileOutputStream(hashFile);
-            IoUtil.copy(file.getInputStream(), os);
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
+        File hashFile = FileUtil.touch(pathManager.getDirPath() + pathManager.getTexturesPath() + "/" + hashPath + ".png");
+        FileOutputStream os = new FileOutputStream(hashFile);
+        IoUtil.copy(file.getInputStream(), os);
+        return true;
     }
 }

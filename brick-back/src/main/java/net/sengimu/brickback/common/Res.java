@@ -7,6 +7,10 @@ import org.springframework.util.MultiValueMap;
 
 public class Res extends ResponseEntity<Object> {
 
+    public Res(Object body, HttpStatusCode status) {
+        super(body, status);
+    }
+
     public Res(Object body, MultiValueMap<String, String> headers, int rawStatus) {
         super(body, headers, rawStatus);
     }
