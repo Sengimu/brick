@@ -2,8 +2,8 @@ package net.sengimu.brickback.yggdrasil.controller;
 
 import net.sengimu.brickback.common.Req;
 import net.sengimu.brickback.common.Res;
-import net.sengimu.brickback.yggdrasil.bo.ProfileInfo;
-import net.sengimu.brickback.yggdrasil.service.SessionService;
+import net.sengimu.brickback.yggdrasil.bo.YggdrasilProfileInfo;
+import net.sengimu.brickback.yggdrasil.service.YggdrasilSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +11,10 @@ import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequestMapping("/api/yggdrasil")
-public class SessionController {
+public class YggdrasilSessionController {
 
     @Autowired
-    private SessionService sessionService;
+    private YggdrasilSessionService yggdrasilSessionService;
 
     @PostMapping("/sessionserver/session/minecraft/join")
     public Res join(@RequestBody Req params) {
@@ -23,13 +23,13 @@ public class SessionController {
         String selectedProfile = params.getStr("selectedProfile");
         String serverId = params.getStr("serverId");
 
-        return sessionService.join(accessToken, selectedProfile, serverId) ? Res.ySuccess(204) : Res.yFail("ForbiddenOperationException", "Invalid token.", 403);
+        return yggdrasilSessionService.join(accessToken, selectedProfile, serverId) ? Res.ySuccess(204) : Res.yFail("ForbiddenOperationException", "Invalid token.", 403);
     }
 
     @GetMapping("/sessionserver/session/minecraft/hasJoined")
     public Res hasJoined(@RequestParam("username") String username, @RequestParam("serverId") String serverId, @RequestParam(name = "ip", required = false) String ip) throws NoSuchAlgorithmException {
 
-        ProfileInfo profileInfo = sessionService.hasJoined(username, serverId, ip);
+        YggdrasilProfileInfo profileInfo = yggdrasilSessionService.hasJoined(username, serverId, ip);
         return profileInfo != null ? Res.ySuccess(profileInfo) : Res.ySuccess(204);
     }
 }

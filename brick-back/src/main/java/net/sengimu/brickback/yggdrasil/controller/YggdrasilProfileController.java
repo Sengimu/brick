@@ -2,9 +2,9 @@ package net.sengimu.brickback.yggdrasil.controller;
 
 import cn.hutool.crypto.digest.DigestUtil;
 import net.sengimu.brickback.common.Res;
-import net.sengimu.brickback.yggdrasil.bo.ProfileInfo;
-import net.sengimu.brickback.yggdrasil.service.ProfileInfoService;
-import net.sengimu.brickback.yggdrasil.service.TokenService;
+import net.sengimu.brickback.yggdrasil.bo.YggdrasilProfileInfo;
+import net.sengimu.brickback.yggdrasil.service.YggdrasilProfileInfoService;
+import net.sengimu.brickback.yggdrasil.service.YggdrasilTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,31 +20,31 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/yggdrasil")
-public class ProfileController {
+public class YggdrasilProfileController {
 
     @Autowired
-    private ProfileInfoService profileInfoService;
+    private YggdrasilProfileInfoService yggdrasilProfileInfoService;
 
     @Autowired
-    private TokenService tokenService;
+    private YggdrasilTokenService yggdrasilTokenService;
 
     @GetMapping("/sessionserver/session/minecraft/profile/{uuid}")
-    public Res getProfileInfoByUUID(@PathVariable("uuid") String uuid, @RequestParam(name = "unsigned", required = false) String unsigned) throws NoSuchAlgorithmException {
+    public Res getYggdrasilProfileInfoByUUID(@PathVariable("uuid") String uuid, @RequestParam(name = "unsigned", required = false) String unsigned) throws NoSuchAlgorithmException {
 
-        ProfileInfo profileInfo = profileInfoService.getProfileInfoByUUID(uuid);
+        YggdrasilProfileInfo profileInfo = yggdrasilProfileInfoService.getYggdrasilProfileInfoByUUID(uuid);
         return profileInfo != null ? Res.ySuccess(profileInfo) : Res.ySuccess(204);
     }
 
     @PostMapping("/api/profiles/minecraft")
-    public Res getProfileInfosByName(@RequestBody List<String> params) throws NoSuchAlgorithmException {
+    public Res getYggdrasilProfileInfosByName(@RequestBody List<String> params) throws NoSuchAlgorithmException {
 
         if (params.isEmpty() || params.size() > 5) {
             return Res.yFail("ForbiddenOperationException", "Params length not allowed.", 403);
         }
 
-        List<ProfileInfo> profileInfos = new ArrayList<>();
+        List<YggdrasilProfileInfo> profileInfos = new ArrayList<>();
         for (String profileName : params) {
-            profileInfos.add(profileInfoService.getProfileInfoByName(profileName));
+            profileInfos.add(yggdrasilProfileInfoService.getYggdrasilProfileInfoByName(profileName));
         }
 
         return Res.ySuccess(profileInfos);
@@ -53,7 +53,7 @@ public class ProfileController {
     @PutMapping("/api/user/profile/{uuid}/{textureType}")
     public Res putTextureByUUID(@PathVariable("uuid") String uuid, @PathVariable("textureType") String textureType, @RequestParam("model") String model, @RequestParam("file") MultipartFile file, @RequestHeader(name = "Authorization", required = false) String authorization) throws IOException {
 
-        if (authorization == null || tokenService.validateToken(authorization.split(" ")[1]) == null) {
+        if (authorization == null || yggdrasilTokenService.validateYggdrasilToken(authorization.split(" ")[1]) == null) {
             return Res.yFail("UnauthorizedException", "Authorization is not exist.", 401);
         }
 
@@ -82,17 +82,17 @@ public class ProfileController {
 
         String hashPath = DigestUtil.sha256Hex(file.getBytes());
 
-        return profileInfoService.putTextureByUUID(uuid, textureType, model, hashPath, file) ? Res.ySuccess(204) : Res.yFail("ForbiddenOperationException", "The operation occur exception.", 403);
+        return yggdrasilProfileInfoService.putTextureByUUID(uuid, textureType, model, hashPath, file) ? Res.ySuccess(204) : Res.yFail("ForbiddenOperationException", "The operation occur exception.", 403);
     }
 
     @DeleteMapping("/api/user/profile/{uuid}/{textureType}")
     public Res deleteTextureByUUID(@PathVariable("uuid") String uuid, @PathVariable("textureType") String textureType, @RequestHeader(name = "Authorization", required = false) String authorization) {
 
-        if (authorization == null || tokenService.validateToken(authorization.split(" ")[1]) == null) {
+        if (authorization == null || yggdrasilTokenService.validateYggdrasilToken(authorization.split(" ")[1]) == null) {
             return Res.yFail("UnauthorizedException", "Authorization is not exist.", 401);
         }
 
-        profileInfoService.deleteTextureByUUID(uuid, textureType);
+        yggdrasilProfileInfoService.deleteTextureByUUID(uuid, textureType);
         return Res.ySuccess(204);
     }
 }

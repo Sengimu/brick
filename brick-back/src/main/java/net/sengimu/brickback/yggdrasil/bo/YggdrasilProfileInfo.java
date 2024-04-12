@@ -15,13 +15,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Data
-public class ProfileInfo {
+public class YggdrasilProfileInfo {
 
     private String id;
     private String name;
     private List<Map<String, Object>> properties;
 
-    public ProfileInfo(Profile profile, List<Texture> textures, String urlPrefix) throws NoSuchAlgorithmException {
+    public YggdrasilProfileInfo(Profile profile, List<Texture> textures, String urlPrefix) throws NoSuchAlgorithmException {
 
         this.id = profile.getUuid();
         this.name = profile.getName();

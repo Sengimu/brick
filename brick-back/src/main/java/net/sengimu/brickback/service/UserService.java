@@ -21,6 +21,13 @@ public class UserService {
         return userMapper.selectOne(userQueryWrapper);
     }
 
+    public User getUserByUsername(String username) {
+
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("email", username);
+        return userMapper.selectOne(userQueryWrapper);
+    }
+
     public User getUserById(Integer id) {
 
         return userMapper.selectById(id);

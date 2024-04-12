@@ -8,7 +8,7 @@ import net.sengimu.brickback.po.Profile;
 import net.sengimu.brickback.po.Texture;
 import net.sengimu.brickback.service.ProfileService;
 import net.sengimu.brickback.service.TextureService;
-import net.sengimu.brickback.yggdrasil.bo.ProfileInfo;
+import net.sengimu.brickback.yggdrasil.bo.YggdrasilProfileInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ProfileInfoService {
+public class YggdrasilProfileInfoService {
 
     @Autowired
     private ProfileService profileService;
@@ -32,25 +32,22 @@ public class ProfileInfoService {
     @Autowired
     private HttpServletRequest request;
 
-    @Autowired
-    private PathManager pathManager;
-
-    public List<ProfileInfo> getProfileInfosByUserId(Integer userId) throws NoSuchAlgorithmException {
+    public List<YggdrasilProfileInfo> getYggdrasilProfileInfosByUserId(int userId) throws NoSuchAlgorithmException {
 
         String urlPrefix = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/textures/";
 
         List<Profile> profiles = profileService.getProfilesByUserId(userId);
-        List<ProfileInfo> profileInfos = new ArrayList<>();
+        List<YggdrasilProfileInfo> yggdrasilProfileInfos = new ArrayList<>();
 
         for (Profile profile : profiles) {
             List<Texture> textures = textureService.getTexturesByProfileId(profile.getId());
-            profileInfos.add(new ProfileInfo(profile, textures, urlPrefix));
+            yggdrasilProfileInfos.add(new YggdrasilProfileInfo(profile, textures, urlPrefix));
         }
 
-        return profileInfos;
+        return yggdrasilProfileInfos;
     }
 
-    public ProfileInfo getProfileInfoByProfile(Profile profile) throws NoSuchAlgorithmException {
+    public YggdrasilProfileInfo getYggdrasilProfileInfoByProfile(Profile profile) throws NoSuchAlgorithmException {
 
         if (profile == null) {
             return null;
@@ -58,15 +55,15 @@ public class ProfileInfoService {
 
         String urlPrefix = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/textures/";
         List<Texture> textures = textureService.getTexturesByProfileId(profile.getId());
-        return new ProfileInfo(profile, textures, urlPrefix);
+        return new YggdrasilProfileInfo(profile, textures, urlPrefix);
     }
 
-    public ProfileInfo getProfileInfoByUUID(String uuid) throws NoSuchAlgorithmException {
-        return getProfileInfoByProfile(profileService.getProfileByUUID(uuid));
+    public YggdrasilProfileInfo getYggdrasilProfileInfoByUUID(String uuid) throws NoSuchAlgorithmException {
+        return getYggdrasilProfileInfoByProfile(profileService.getProfileByUUID(uuid));
     }
 
-    public ProfileInfo getProfileInfoByName(String profileName) throws NoSuchAlgorithmException {
-        return getProfileInfoByProfile(profileService.getProfileByName(profileName));
+    public YggdrasilProfileInfo getYggdrasilProfileInfoByName(String profileName) throws NoSuchAlgorithmException {
+        return getYggdrasilProfileInfoByProfile(profileService.getProfileByName(profileName));
     }
 
     public void deleteTextureByUUID(String uuid, String textureType) {
@@ -87,7 +84,7 @@ public class ProfileInfoService {
             return false;
         }
 
-        File hashFile = FileUtil.touch(pathManager.getDirPath() + pathManager.getTexturesPath() + "/" + hashPath + ".png");
+        File hashFile = FileUtil.touch(PathManager.USER_DIR + PathManager.TEXTURES_PATH + "/" + hashPath + ".png");
         FileOutputStream os = new FileOutputStream(hashFile);
         IoUtil.copy(file.getInputStream(), os);
         return true;

@@ -14,7 +14,7 @@ public class ProfileService {
     @Autowired
     private ProfileMapper profileMapper;
 
-    public List<Profile> getProfilesByUserId(Integer userId) {
+    public List<Profile> getProfilesByUserId(int userId) {
 
         QueryWrapper<Profile> profileQueryWrapper = new QueryWrapper<>();
         profileQueryWrapper.eq("user_id", userId);

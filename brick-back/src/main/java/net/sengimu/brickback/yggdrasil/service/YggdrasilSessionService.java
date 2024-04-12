@@ -7,8 +7,8 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import net.sengimu.brickback.po.Profile;
 import net.sengimu.brickback.service.ProfileService;
-import net.sengimu.brickback.yggdrasil.bo.ProfileInfo;
-import net.sengimu.brickback.yggdrasil.bo.Token;
+import net.sengimu.brickback.yggdrasil.bo.YggdrasilProfileInfo;
+import net.sengimu.brickback.yggdrasil.bo.YggdrasilToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +16,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 @Service
-public class SessionService {
+public class YggdrasilSessionService {
 
     @Autowired
     private ProfileService profileService;
 
     @Autowired
-    private ProfileInfoService profileInfoService;
+    private YggdrasilProfileInfoService profileInfoService;
 
     @Autowired
     private HttpServletRequest request;
@@ -40,8 +40,8 @@ public class SessionService {
             return false;
         }
 
-        Token token = (Token) ifPresent;
-        if (!token.getUuid().equals(selectedProfile)) {
+        YggdrasilToken yggdrasilToken = (YggdrasilToken) ifPresent;
+        if (!yggdrasilToken.getUuid().equals(selectedProfile)) {
             return false;
         }
 
@@ -49,21 +49,21 @@ public class SessionService {
         return true;
     }
 
-    public ProfileInfo hasJoined(String username, String serverId, String ip) throws NoSuchAlgorithmException {
+    public YggdrasilProfileInfo hasJoined(String username, String serverId, String ip) throws NoSuchAlgorithmException {
 
         JSONObject serverIdObj = JSONUtil.parseObj(serverIdCache.getIfPresent(serverId));
         String accessToken = serverIdObj.getStr("accessToken");
-        Token token = (Token) tokenCache.getIfPresent(accessToken);
+        YggdrasilToken yggdrasilToken = (YggdrasilToken) tokenCache.getIfPresent(accessToken);
 
-        if (token == null) {
+        if (yggdrasilToken == null) {
             return null;
         }
 
-        Profile profile = profileService.getProfileByUUID(token.getUuid());
+        Profile profile = profileService.getProfileByUUID(yggdrasilToken.getUuid());
         if (!username.equals(profile.getName())) {
             return null;
         }
 
-        return profileInfoService.getProfileInfoByProfile(profile);
+        return profileInfoService.getYggdrasilProfileInfoByProfile(profile);
     }
 }

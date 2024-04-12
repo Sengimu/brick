@@ -7,16 +7,12 @@ import org.springframework.util.MultiValueMap;
 
 public class Res extends ResponseEntity<Object> {
 
-    public Res(Object body, HttpStatusCode status) {
-        super(body, status);
-    }
-
     public Res(Object body, MultiValueMap<String, String> headers, int rawStatus) {
         super(body, headers, rawStatus);
     }
 
-    //yggdrasil
-    public static Res ySuccess(Integer httpStatus) {
+    // yggdrasil
+    public static Res ySuccess(int httpStatus) {
         return ySuccess(null, httpStatus);
     }
 
@@ -24,31 +20,27 @@ public class Res extends ResponseEntity<Object> {
         return ySuccess(body, 200);
     }
 
-    public static Res ySuccess(Object body, Integer httpStatus) {
+    public static Res ySuccess(Object body, int httpStatus) {
         return yRes(body, httpStatus);
     }
 
-    public static Res yFail(String error, String errorMessage, Integer httpStatus) {
+    public static Res yFail(String error, String errorMessage, int httpStatus) {
         return yFail(error, errorMessage, null, httpStatus);
     }
 
-    public static Res yFail(String error, String errorMessage, String cause, Integer httpStatus) {
-        return yRes(new YggdrasilFailBody(error, errorMessage, cause), httpStatus);
+    public static Res yFail(String error, String errorMessage, String cause, int status) {
+        return yRes(new YggdrasilFailBody(error, errorMessage, cause), status);
     }
 
-    private static Res yRes(Object body, Integer httpStatus) {
+    private static Res yRes(Object body, int status) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new Res(body, headers, httpStatus);
+        return new Res(body, headers, status);
     }
 
-    //web
+    // web
     public static Res wSuccess() {
-        return wSuccess("success");
-    }
-
-    public static Res wSuccess(String msg) {
-        return wSuccess(msg, null);
+        return wSuccess(null);
     }
 
     public static Res wSuccess(Object data) {
@@ -56,7 +48,11 @@ public class Res extends ResponseEntity<Object> {
     }
 
     public static Res wSuccess(String msg, Object data) {
-        return wRes(1, msg, data);
+        return wSuccess(msg, data, 200);
+    }
+
+    public static Res wSuccess(String msg, Object data, int status) {
+        return wRes(1, msg, data, status);
     }
 
     public static Res wFail() {
@@ -64,12 +60,16 @@ public class Res extends ResponseEntity<Object> {
     }
 
     public static Res wFail(String msg) {
-        return wRes(-1, msg, null);
+        return wFail(-1, msg, 200);
     }
 
-    private static Res wRes(Integer code, String msg, Object data) {
+    public static Res wFail(int code, String msg, int status) {
+        return wRes(code, msg, null, status);
+    }
+
+    private static Res wRes(int code, String msg, Object data, int status) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new Res(new WebBody(code, msg, data), headers, 200);
+        return new Res(new WebBody(code, msg, data), headers, status);
     }
 }

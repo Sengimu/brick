@@ -6,14 +6,17 @@ import net.sengimu.brickback.po.User;
 import net.sengimu.brickback.po.UserProperty;
 import net.sengimu.brickback.service.UserPropertyService;
 import net.sengimu.brickback.service.UserService;
-import net.sengimu.brickback.yggdrasil.bo.UserInfo;
+import net.sengimu.brickback.yggdrasil.bo.YggdrasilUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserInfoService {
+public class YggdrasilUserInfoService {
 
     @Autowired
     private UserService userService;
@@ -21,17 +24,22 @@ public class UserInfoService {
     @Autowired
     private UserPropertyService userPropertyService;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @Resource(name = "loginRateCache")
     private Cache<String, Object> loginRateCache;
 
     @Resource(name = "userHasTokenCache")
     private Cache<String, Object> userHasTokenCache;
 
-    public UserInfo getUserInfoByUsernameAndPassword(String username, String password) {
+    public YggdrasilUserInfo getYggdrasilUserInfoByUsernameAndPassword(String username, String password) {
 
         loginRateCache.put(username, "1");
 
-        User user = userService.getUserByUsernameAndPassword(username, password);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        User user = (User) authentication.getPrincipal();
 
         if (user == null) {
             return null;
@@ -39,18 +47,18 @@ public class UserInfoService {
 
         List<UserProperty> userProperties = userPropertyService.getUserPropertiesByUserId(user.getId());
 
-        return new UserInfo(user, userProperties);
+        return new YggdrasilUserInfo(user, userProperties);
     }
 
     public Boolean checkLoginRate(String username) {
         return !(loginRateCache.getIfPresent(username) == null);
     }
 
-    public UserInfo getUserInfoInfoById(Integer id) {
+    public YggdrasilUserInfo getYggdrasilUserInfoInfoById(int id) {
 
         User user = userService.getUserById(id);
         List<UserProperty> userProperties = userPropertyService.getUserPropertiesByUserId(user.getId());
-        return new UserInfo(user, userProperties);
+        return new YggdrasilUserInfo(user, userProperties);
     }
 
     public Boolean signOut(String username, String password) {

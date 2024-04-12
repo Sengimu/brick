@@ -5,10 +5,12 @@ create table if not exists user
     email      varchar(255) not null,
     username   varchar(255) not null,
     password   varchar(255) not null,
+    role       varchar(255) not null,
     avatar     varchar(255) null,
     ip         varchar(255) null,
     register   varchar(255) null,
-    last_login varchar(255) null
+    last_login varchar(255) null,
+    disabled   int          not null default 0
 )
     row_format = DYNAMIC;
 

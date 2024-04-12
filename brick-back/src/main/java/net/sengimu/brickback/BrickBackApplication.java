@@ -7,8 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BrickBackApplication {
 
     public static void main(String[] args) {
-
         SpringApplication.run(BrickBackApplication.class, args);
     }
-
 }

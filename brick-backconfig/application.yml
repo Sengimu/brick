@@ -8,7 +8,7 @@ server-info:
   serverName: 积木brick-Yggdrasil验证端
   # 登录限速
   # 单位为秒,代表x秒可登录一次
-  loginRate: 1
+  loginRate: 5
   # 日志级别
   log-level: info
 

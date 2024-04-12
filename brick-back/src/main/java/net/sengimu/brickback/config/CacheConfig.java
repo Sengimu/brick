@@ -1,4 +1,4 @@
-package net.sengimu.brickback.common;
+package net.sengimu.brickback.config;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class CacheConfig {
 
     @Value("${server-info.loginRate}")
-    private Long loginRate;
+    private long loginRate;
 
     @Bean("loginRateCache")
     public Cache<String, Object> loginRateCache() {

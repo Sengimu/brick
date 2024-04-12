@@ -16,7 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/yggdrasil")
-public class ExtendController {
+public class YggdrasilExtendController {
 
     @Autowired
     private HttpServletRequest request;

@@ -10,5 +10,4 @@ class BrickBackApplicationTests {
     void contextLoads() {
 
     }
-
 }

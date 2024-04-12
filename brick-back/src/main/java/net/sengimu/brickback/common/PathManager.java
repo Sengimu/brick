@@ -1,23 +1,10 @@
 package net.sengimu.brickback.common;
 
-import lombok.Data;
-import org.springframework.stereotype.Component;
-
-@Data
-@Component
 public class PathManager {
 
-    private String dirPath;
-    private String applicationPath;
-    private String keyPairPath;
-    private String jwtKeyPath;
-    private String texturesPath;
-
-    public PathManager() {
-        this.dirPath = System.getProperty("user.dir");
-        this.applicationPath = "/config/application.yml";
-        this.keyPairPath = "/config/key-pair.setting";
-        this.jwtKeyPath = "/config/jwt-key.setting";
-        this.texturesPath = "/textures";
-    }
+    public static final String USER_DIR = System.getProperty("user.dir");
+    public static final String APPLICATION_PATH = "/config/application.yml";
+    public static final String KEY_PAIR_PATH = "/config/key-pair.setting";
+    public static final String JWT_KEY_PATH = "/config/jwt-key.setting";
+    public static final String TEXTURES_PATH = "/textures";
 }

@@ -14,7 +14,7 @@ public class UserPropertyService {
     @Autowired
     private UserPropertyMapper userPropertyMapper;
 
-    public List<UserProperty> getUserPropertiesByUserId(Integer userId) {
+    public List<UserProperty> getUserPropertiesByUserId(int userId) {
 
         QueryWrapper<UserProperty> userPropertyQueryWrapper = new QueryWrapper<>();
         userPropertyQueryWrapper.eq("user_id", userId);

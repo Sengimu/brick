@@ -12,11 +12,9 @@ import java.security.NoSuchAlgorithmException;
 
 public class KeyPairUtil {
 
-    private static final PathManager PATH_MANAGER = new PathManager();
-
     public static String getPrivateKeyBase64() throws NoSuchAlgorithmException {
 
-        Setting keyPairSetting = new Setting(FileUtil.touch(PATH_MANAGER.getDirPath() + PATH_MANAGER.getKeyPairPath()), CharsetUtil.CHARSET_UTF_8, true);
+        Setting keyPairSetting = new Setting(FileUtil.touch(PathManager.USER_DIR + PathManager.KEY_PAIR_PATH), CharsetUtil.CHARSET_UTF_8, true);
 
         if (!keyPairSetting.containsKey("privateKey")) {
             generateKeyPair();
@@ -28,7 +26,7 @@ public class KeyPairUtil {
 
     public static String getPublicKeyBase64() throws NoSuchAlgorithmException {
 
-        Setting keyPairSetting = new Setting(FileUtil.touch(PATH_MANAGER.getDirPath() + PATH_MANAGER.getKeyPairPath()), CharsetUtil.CHARSET_UTF_8, true);
+        Setting keyPairSetting = new Setting(FileUtil.touch(PathManager.USER_DIR + PathManager.KEY_PAIR_PATH), CharsetUtil.CHARSET_UTF_8, true);
 
         if (!keyPairSetting.containsKey("publicKey")) {
             generateKeyPair();
@@ -49,7 +47,7 @@ public class KeyPairUtil {
         String privateKey = Base64.encode(pair.getPrivate().getEncoded());
         String publicKey = Base64.encode(pair.getPublic().getEncoded());
 
-        Setting keyPairSetting = new Setting(FileUtil.touch(PATH_MANAGER.getDirPath() + PATH_MANAGER.getKeyPairPath()), CharsetUtil.CHARSET_UTF_8, true);
+        Setting keyPairSetting = new Setting(FileUtil.touch(PathManager.USER_DIR + PathManager.KEY_PAIR_PATH), CharsetUtil.CHARSET_UTF_8, true);
         keyPairSetting.set("publicKey", publicKey);
         keyPairSetting.set("privateKey", privateKey);
         keyPairSetting.store();

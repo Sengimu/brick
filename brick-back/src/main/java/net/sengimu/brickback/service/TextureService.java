@@ -15,7 +15,7 @@ public class TextureService {
     @Autowired
     private TextureMapper textureMapper;
 
-    public List<Texture> getTexturesByProfileId(Integer profileId) {
+    public List<Texture> getTexturesByProfileId(int profileId) {
 
         QueryWrapper<Texture> textureQueryWrapper = new QueryWrapper<>();
         textureQueryWrapper.eq("profile_id", profileId);

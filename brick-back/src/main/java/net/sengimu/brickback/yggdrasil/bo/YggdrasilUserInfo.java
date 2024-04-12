@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class UserInfo {
+public class YggdrasilUserInfo {
 
     private String id;
     private List<Map<String, Object>> properties;
 
-    public UserInfo(User user, List<UserProperty> userProperties) {
+    public YggdrasilUserInfo(User user, List<UserProperty> userProperties) {
 
         this.id = String.valueOf(user.getId());
 

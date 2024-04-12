@@ -5,10 +5,12 @@ create table if not exists user
     email      TEXT    not null,
     username   TEXT    not null,
     password   TEXT    not null,
+    role       TEXT    not null,
     avatar     TEXT    null,
     ip         TEXT    null,
     register   TEXT    null,
-    last_login TEXT    null
+    last_login TEXT    null,
+    disabled   INTEGER not null default 0
 );
 
 create table if not exists user_property

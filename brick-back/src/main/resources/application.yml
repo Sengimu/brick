@@ -1,3 +1,10 @@
+server-info:
+  port: 8080
+  implementationName: 积木brick-Yggdrasil验证端
+  implementationVersion: 0.3.0
+  loginRate: 1
+  log-level: info
+
 server:
   port: ${server-info.port}
 
@@ -18,15 +25,7 @@ logging:
   file:
     name: log/server.log
 
+database: sqlite
 spring:
   profiles:
     include: ${database}
-
-database: sqlite
-
-server-info:
-  port: 8080
-  implementationName: 积木brick-Yggdrasil验证端
-  implementationVersion: 0.3.0
-  loginRate: 5
-  log-level: info
